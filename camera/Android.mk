@@ -91,9 +91,14 @@ LOCAL_SHARED_LIBRARIES:= \
     libdomx \
     libion_ti \
     libjpeg \
+    libjhead \
     libexif
 
 LOCAL_CFLAGS := -fno-short-enums -DCOPY_IMAGE_BUFFER
+
+ifeq ($(BN_CAMERA_STUB),true)
+    LOCAL_CFLAGS += -DUSE_CAMERA_STUB
+endif
 
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 LOCAL_MODULE:= camera.$(TARGET_BOOTLOADER_BOARD_NAME)

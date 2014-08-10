@@ -639,6 +639,7 @@ int camera_get_number_of_cameras(void)
 
 int camera_get_camera_info(int camera_id, struct camera_info *info)
 {
+#ifndef USE_CAMERA_STUB
     int rv = 0;
     int face_value = CAMERA_FACING_BACK;
     int orientation = 0;
@@ -692,6 +693,15 @@ int camera_get_camera_info(int camera_id, struct camera_info *info)
 
 end:
     return rv;
+#else
+// Stub out camera entirely
+    ALOGI("camera_get_camera_info stub implementation for Camera id %d", camera_id);
+
+    info->facing = CAMERA_FACING_FRONT;
+    info->orientation = 0;
+
+    return android::NO_ERROR;
+#endif
 }
 
 

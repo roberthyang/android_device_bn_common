@@ -97,6 +97,13 @@ LOCAL_SHARED_LIBRARIES:= \
 LOCAL_CFLAGS := -fno-short-enums -DCOPY_IMAGE_BUFFER
 
 ifeq ($(BN_CAMERA_STUB),true)
+    LOCAL_SRC_FILES:= \
+        CameraHal_Module.cpp
+
+    LOCAL_SHARED_LIBRARIES:= \
+        libcutils \
+        libcamera_client
+
     LOCAL_CFLAGS += -DUSE_CAMERA_STUB
 endif
 

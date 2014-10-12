@@ -34,6 +34,13 @@ else
 LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
 endif
 
+# add all configurations
+PRODUCT_AAPT_CONFIG := normal ldpi mdpi hdpi xhdpi xxhdpi
+PRODUCT_AAPT_PREF_CONFIG := hdpi
+
+# en_US only
+PRODUCT_LOCALES := en_US
+
 # Permissions
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml \
@@ -51,7 +58,15 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
     frameworks/native/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
     frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml \
-    $(call add-to-product-copy-files-if-exists,packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml)
+    frameworks/av/media/libeffects/data/audio_effects.conf:system/etc/audio_effects.conf \
+    frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
+    frameworks/native/data/etc/android.hardware.sensor.barometer.xml:system/etc/permissions/android.hardware.sensor.barometer.xml \
+    frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
+    frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
+    frameworks/native/data/etc/android.hardware.usb.accessory.xml:system/etc/permissions/android.hardware.usb.accessory.xml \
+    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+
+#   $(call add-to-product-copy-files-if-exists,packages/wallpapers/LivePicker/android.software.live_wallpaper.xml:system/etc/permissions/android.software.live_wallpaper.xml)
 
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0 \
@@ -62,7 +77,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.crypto.state=unencrypted \
     persist.sys.usb.config=mtp,adb \
     persist.sys.root_access=3 \
-    ro.sf.lcd_density=240 \
+    ro.sf.lcd_density=320 \
     ro.nf.profile=2 \
     ro.nf.level=512 \
     ro.bq.gpu_to_cpu_unsupported=1 \
@@ -100,6 +115,61 @@ PRODUCT_PACKAGES += \
 
 # Audio Support
 PRODUCT_PACKAGES += \
+    Bluetooth \
+    FusedLocation \
+    InputDevices \
+    Keyguard \
+    LatinIME \
+    Phone \
+    PrintSpooler \
+    Provision \
+    Settings \
+    SystemUI \
+    TeleService \
+    WAPPushManager \
+    apache-xml \
+    audio \
+    audio_policy.default \
+    audio.primary.default \
+    bouncycastle \
+    cacerts \
+    com.android.future.usb.accessory \
+    conscrypt \
+    core \
+    core-junit \
+    dalvikvm \
+    dexdeps \
+    dexdump \
+    dexlist \
+    dexopt \
+    dmtracedump \
+    dx \
+    ext \
+    hostapd \
+    hprof-conv \
+    libcrypto \
+    libdvm \
+    libexpat \
+    libicui18n \
+    libicuuc \
+    libjavacore \
+    libnativehelper \
+    librs_jni \
+    libssl \
+    libvideoeditor_core \
+    libvideoeditor_jni \
+    libvideoeditor_osal \
+    libvideoeditorplayer \
+    libvideoeditor_videofilters \
+    libz \
+    lint \
+    local_time.default \
+    network \
+    okhttp \
+    pand \
+    power.default \
+    sdptool \
+    wpa_supplicant.conf \
     libaudioutils \
     Music \
     tinyplay \
@@ -125,7 +195,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     Email \
 
-PRODUCT_AAPT_PREF_CONFIG := hdpi
 # BT
 PRODUCT_PACKAGES += \
     uim-sysfs \
@@ -145,10 +214,6 @@ PRODUCT_COPY_FILES += \
     $(COMMON_FOLDER)/prebuilt/usr/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl\
     $(COMMON_FOLDER)/prebuilt/usr/keylayout/twl6030_pwrbutton.kl:system/usr/keylayout/twl6030_pwrbutton.kl
 
-
-# USB Host app switcher
-#PRODUCT_PACKAGES += USBHostSwitcher
-
 # TI OMAP4
 PRODUCT_PACKAGES += \
     libdomx \
@@ -163,17 +228,16 @@ PRODUCT_PACKAGES += \
     libstagefrighthw \
     libI420colorconvert \
     libtiutils_custom \
-    libcamera \
     libion_ti \
-    libomxcameraadapter \
     smc_pa_ctrl \
     tf_daemon \
     libtf_crypto_sst
 
-# Standard CM stuff.
+# Standard stuff.
 PRODUCT_PACKAGES += \
     hwprops \
-    CMStats \
+    SlimFileManager \
+#    SlimCenter \
 
 # Hardware HALs
 PRODUCT_PACKAGES += \
@@ -198,4 +262,18 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(COMMON_FOLDER)/prebuilt/poetry/poem.txt:root/sbin/poem.txt
 
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.carrier=unknown \
+    ro.com.android.dateformat=MM-dd-yyyy \
+    ro.config.ringtone=Ring_Synth_04.ogg \
+    ro.config.notification_sound=pixiedust.ogg
+
+$(call inherit-product, device/bn/common/custom-packages.mk)
+$(call inherit-product, build/target/product/core_base.mk)
+$(call inherit-product-if-exists, frameworks/webview/chromium/chromium.mk)
+$(call inherit-product-if-exists, external/chromium_org/third_party/openmax_dl/dl/openmax_dl_armv7.target.linux-arm.mk)
+$(call inherit-product-if-exists, frameworks/base/data/keyboards/keyboards.mk)
+$(call inherit-product-if-exists, frameworks/base/data/fonts/fonts.mk)
+$(call inherit-product-if-exists, frameworks/base/data/sounds/AllAudio.mk)
 $(call inherit-product-if-exists, vendor/bn/omap4470-common/omap4470-common-vendor.mk)
+$(call inherit-product-if-exists, vendor/slim/config/common_full_tablet_wifionly.mk)
